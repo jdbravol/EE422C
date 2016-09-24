@@ -12,13 +12,21 @@
  * Fall 2016
  */
 
-
 package assignment3;
-import java.util.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Scanner;
+import java.util.Set;
 
 public class Main {
 	
+	static ArrayList<String> dict = new ArrayList<String>();
+	static ArrayList<String> words
+	= new ArrayList<String>();
+	int count;
 	// static variables and constants only here.
 	
 	public static void main(String[] args) throws Exception {
@@ -34,7 +42,9 @@ public class Main {
 			kb = new Scanner(System.in);// default from Stdin
 			ps = System.out;			// default to Stdout
 		}
+		parse(kb);
 		initialize();
+		kb.close();
 		
 		// TODO methods to read in words, output ladder
 	}
@@ -43,6 +53,8 @@ public class Main {
 		// initialize your static variables or constants here.
 		// We will call this method before running our JUNIT tests.  So call it 
 		// only once at the start of main.
+		dict = makeDictionary();
+		
 	}
 	
 	/**
@@ -51,16 +63,26 @@ public class Main {
 	 * If command is /quit, return empty ArrayList. 
 	 */
 	public static ArrayList<String> parse(Scanner keyboard) {
-		// TO DO
-		return null;
+		ArrayList<String> words = new ArrayList<String>();
+		if (keyboard.equals("/quit")){
+			System.exit(0);
+		}
+		else{
+			words.add(keyboard.next());
+			words.add(keyboard.next());
+		}
+		return words;
 	}
 	
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
+		if (start.equals(end)){
+			return null;
+		}
 		
 		// Returned list should be ordered start to end.  Include start and end.
 		// Return empty list if no ladder.
 		// TODO some code
-		Set<String> dict = makeDictionary();
+		
 		// TODO more code
 		
 		return null; // replace this line later with real return
@@ -69,14 +91,14 @@ public class Main {
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
 		
 		// TODO some code
-		Set<String> dict = makeDictionary();
+		
 		// TODO more code
 		
 		return null; // replace this line later with real return
 	}
     
-	public static Set<String>  makeDictionary () {
-		Set<String> words = new HashSet<String>();
+	public static ArrayList<String>  makeDictionary () {
+		ArrayList<String> words = new ArrayList<String>();
 		Scanner infile = null;
 		try {
 			infile = new Scanner (new File("five_letter_words.txt"));
