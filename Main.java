@@ -24,6 +24,7 @@ public class Main {
 
 	static ArrayList<String> dict = new ArrayList<String>();
 	static ArrayList<String> ladder = new ArrayList<String>();
+	static ArrayList<String> visited = new ArrayList<String>();
 	static ArrayList<Character> alphabet = new ArrayList<Character>();
 	static int count;
 	static ArrayList<String> words = new ArrayList<String>();
@@ -45,7 +46,7 @@ public class Main {
 		}
 		words = parse(kb);
 		initialize();
-		getWordLadderDFS(words.get(0),words.get(1));
+		getWordLadderDFS(words.get(0), words.get(1));
 		printLadder(ladder);
 		kb.close();
 
@@ -103,35 +104,30 @@ public class Main {
 		return words;
 	}
 
-	public static ArrayList<String> recursionDFS(String start, String end, int index, int aindex) {
+	public static ArrayList<String> recursionDFS(String start, String end, int index, int alphin) {
 		ArrayList<String> newladder = new ArrayList<String>();
 		if (end.equals(start)) { // recursive case
 			return ladder;
-		} else if (aindex != 26) {
-			int newindex = aindex + 1;
-			int firstlet = alphabet.indexOf(start.charAt(index));
-			String newWord = new String();
-			StringBuilder newString = new StringBuilder(start);
-			newString.setCharAt(index, alphabet.get((firstlet + aindex) % 26));
-			newWord = newString.toString();
-			if (dict.contains(newWord) && !ladder.contains(newWord)) {
-				ladder.add(newWord);
-				newladder = recursionDFS(newWord, end, 0, 0);
-				if (newladder == null){
-					ladder.remove(newWord);
-					newladder = recursionDFS(start, end, (index+1)%5, 0);
-				}
-			} else {
-				newladder = recursionDFS(start, end, index, newindex);
-				if (newladder == null){
-					ladder.remove(newWord);
-					newladder = recursionDFS(start, end, (index+1)%5, newindex);
-				}
-			}
-		} else if (index != start.length() - 1) {
-			newladder = recursionDFS(start, end, index + 1, 0);
-		} else {
+		} else if (index > 4 && alphin > 26) {
 			return null;
+		} else if (alphin != 26) {
+			int firstlet = alphabet.indexOf(start.charAt(index));
+			StringBuilder newString = new StringBuilder(start);
+			newString.setCharAt(index, alphabet.get((firstlet + alphin) % 26));
+			if (dict.contains(newString.toString()) && !ladder.contains(newString.toString())
+					&& !visited.contains(newString.toString())) {
+				ladder.add(newString.toString());
+				visited.add(newString.toString());
+				newladder = recursionDFS(newString.toString(), end, 0, 0);
+				if (newladder.size() == 0) {
+					ladder.remove(newString.toString());
+					if (index < 4) {
+						newladder = recursionDFS(start, end, index, alphin + 1);
+					}
+				}
+			} else if (index != start.length() - 1) {
+				newladder = recursionDFS(start, end, index + 1, 0);
+			}
 		}
 		return newladder;
 	}
@@ -156,9 +152,9 @@ public class Main {
 
 		int letterindex;
 		int alphabetindex;
-		for (letterindex = 0; letterindex<5;letterindex++){
-			for(alphabetindex = 0; alphabetindex<26;alphabetindex++){
-				
+		for (letterindex = 0; letterindex < 5; letterindex++) {
+			for (alphabetindex = 0; alphabetindex < 26; alphabetindex++) {
+
 			}
 		}
 
