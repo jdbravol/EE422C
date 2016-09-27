@@ -50,7 +50,7 @@ public class Main {
 		initialize();
 		// getWordLadderDFS(words.get(0), words.get(1));
 		// printLadder(ladder);
-		ladder = getWordLadderBFS(words.get(0), words.get(1));
+		ladder = getWordLadderDFS(words.get(0), words.get(1));
 		// count = ladder.size() - 2;
 		printLadder(ladder);
 
@@ -187,20 +187,61 @@ public class Main {
 
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
 		ArrayList<String> newladder = new ArrayList<String>();
-		if (start.equals(end)) {
+		ArrayList<String> LOL = new ArrayList<String>();
+		boolean check = true;
+		int letterindex;
+		int alphabetindex;
+		ladder.add(start);
+		if(start.equals(end)){
+			check = false;
+			return ladder;
+		}
+		if(dict.contains(start)){
+			dict.remove(start);
+			
+		}
+		while(check){
+			StringBuilder copyWord = new StringBuilder(start); //copyWord now has start
+			for(letterindex = 0; letterindex < start.length(); letterindex++){
+				char actualLetter = start.charAt(letterindex);
+				for(alphabetindex = 0; alphabetindex < 26; alphabetindex++){
+					copyWord.setCharAt(letterindex, alphabet.get(alphabetindex));
+					if(dict.contains(copyWord.toString())){
+						dict.remove(copyWord.toString());
+						String nextWord = new String(copyWord);
+						newladder = getWordLadderDFS(nextWord, end);
+						if(newladder != null){
+						return ladder;
+					}
+						else{
+							ladder.remove(nextWord);
+						}
+					}
+					
+					
+				}
+				copyWord.setCharAt(letterindex, actualLetter);
+			}
+			check = false;
+			
+			
+		}
+		
+		
+		//the code below is what we had before, and we also had newladder too
+		/*if (start.equals(end)) {
 			return null; // later
 		} else {
 			ladder.add(start);
 			visited.add(start);
 			newladder = recursionDFS(start, end, 0, 0);
-		}
+		}*/
 		// Returned list should be ordered start to end. Include start and end.
 		// Return empty list if no ladder.
 		// TODO some code
 
 		// TODO more code
-
-		return newladder; // replace this line later with real return
+		return null; // replace this line later with real return
 	}
 
 	public static ArrayList<String> getWordLadderBFS(String start, String end) {
@@ -269,9 +310,13 @@ public class Main {
 	}
 
 	public static void printLadder(ArrayList<String> ladder) {
-		if (ladder == null) {
+		if (ladder.equals(null)) {
 			System.out.println("no word ladder can be found between " + words.get(0) + " and " + words.get(1) + ". ");
-		} else {
+		} else if (ladder.size() == 1){
+			System.out.println("a " + (ladder.size() - 1) + "-rung word ladder exists between "
+					+ words.get(0).toString() + " and " + words.get(1).toString() + ". ");
+		}
+		else {
 			System.out.println("a " + (ladder.size() - 2) + "-rung word ladder exists between "
 					+ words.get(0).toString() + " and " + words.get(1).toString() + ". ");
 			for (int i = 0; i < ladder.size(); i++) {
