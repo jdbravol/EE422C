@@ -1,7 +1,6 @@
 /* WORD LADDER Main.java
  * EE422C Project 3 submission by
- * Replace <...> with your actual data.
- * <Student1 Name>
+ * Juan David Bravo
  * <Student1 EID>
  * <Student1 5-digit Unique No.>
  * <Student2 Name>
@@ -101,147 +100,73 @@ public class Main {
 	 */
 	public static ArrayList<String> parse(Scanner keyboard) {
 		ArrayList<String> words = new ArrayList<String>();
-		if (keyboard.equals("/quit")) {
+		words.add(keyboard.next().toLowerCase());
+		if (words.contains("/quit")) {
 			System.exit(0);
 		} else {
 			words.add(keyboard.next().toLowerCase());
-			words.add(keyboard.next().toLowerCase());
+			if (words.contains("/quit")) {
+				System.exit(0);
+			}
 		}
 		return words;
 	}
 
-	public static ArrayList<String> recursionDFS(String start, String end, int index, int alphin) {
-		ArrayList<String> newladder = new ArrayList<String>();
-		newladder = null;
-		if (end.equals(start)) {
-			return ladder;
-		} else if (alphin < 26) { // its checking for all letter possibilities;
-			String newWord = new String();
-			int letter = alphabet.indexOf(end.charAt(index)); // index of the
-																// letter to
-																// replace
-			StringBuilder newString = new StringBuilder(start); // copy of start
-			newString.setCharAt(index, alphabet.get((letter + alphin) % 26)); // replace
-																				// char
-																				// on
-																				// start
-																				// from
-																				// whatever
-																				// letter
-																				// is
-																				// next
-			newWord = newString.toString();
-			if (dict.contains(newWord) && !ladder.contains(newWord) && !visited.contains(newWord)) { // possible
-																										// word
-				ladder.add(newWord);
-				visited.add(newWord);
-				newladder = recursionDFS(newWord, end, 0, 0); // recursive
-																// method with
-																// newWord
-				if (newladder == null) { // empty path
-					ladder.remove(newWord); // remove the newWord from ladder,
-											// but nor from visited
-					newladder = recursionDFS(start, end, index, alphin + 1); // try
-																				// with
-																				// next
-																				// letter
-					if (newladder == null && index < 4) { // no more letters,
-															// next index
-						return recursionDFS(start, end, index + 1, 0);
+	public static ArrayList<String> LadderReducer() {
+		for (int i = 0; i < (ladder.size() - 2); i++) {
+			for (int k = 1; k < ladder.size(); k++) {
+				ArrayList<Boolean> similar = new ArrayList<Boolean>();
+				for (int j = 0; j < ladder.get(0).length(); j++) {
+					if (ladder.get(i).charAt(j) == ladder.get(i + 2).charAt(j)) {
+						similar.add(true);
+					} else {
+						similar.add(false);
 					}
 				}
-			} else { // keep looking for word
-				newladder = recursionDFS(start, end, index, alphin + 1); // try
-																			// with
-																			// next
-																			// letter
-				if (newladder == null && index < 4) { // out of letters, next
-														// index
-					return recursionDFS(start, end, index + 1, 0);
+				if (similar.contains(false)) {
+					similar.remove(false);
+					if (!similar.contains(false)) {
+						ladder.remove(i + 1);
+					}
 				}
 			}
-		} else if (index < 4) { // no more letter possibilities but still index
-								// available
-			return recursionDFS(start, end, index + 1, 0); // will check in the
-															// next index
 		}
-		return newladder;
+		return ladder;
 	}
-
-	/*
-	 * if (end.equals(start)) { // recursive case return ladder; } else if
-	 * (index > 4 && alphin > 26) { return null; } else if (alphin != 26) { int
-	 * firstlet = alphabet.indexOf(start.charAt(index)); StringBuilder newString
-	 * = new StringBuilder(start); newString.setCharAt(index,
-	 * alphabet.get((firstlet + alphin) % 26)); if
-	 * (dict.contains(newString.toString()) &&
-	 * !ladder.contains(newString.toString()) &&
-	 * !visited.contains(newString.toString())) {
-	 * ladder.add(newString.toString()); visited.add(newString.toString());
-	 * newladder = recursionDFS(newString.toString(), end, 0, 0); if
-	 * (newladder.size() == 0) { ladder.remove(newString.toString()); if (index
-	 * < 4) { return newladder = recursionDFS(start, end, index, alphin + 1); }
-	 * } return newladder; } } else if (index != start.length() - 1) { return
-	 * newladder = recursionDFS(start, end, index + 1, 0); }
-	 */
 
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
 		ArrayList<String> newladder = new ArrayList<String>();
-		ArrayList<String> LOL = new ArrayList<String>();
-		boolean check = true;
 		int letterindex;
 		int alphabetindex;
 		ladder.add(start);
-		if(start.equals(end)){
-			check = false;
-			return ladder;
+		if (start.equals(end)) {
+			return LadderReducer();
 		}
-		if(dict.contains(start)){
+		if (dict.contains(start)) {
 			dict.remove(start);
-			
 		}
-		while(check){
-			StringBuilder copyWord = new StringBuilder(start); //copyWord now has start
-			for(letterindex = 0; letterindex < start.length(); letterindex++){
-				char actualLetter = start.charAt(letterindex);
-				for(alphabetindex = 0; alphabetindex < 26; alphabetindex++){
-					copyWord.setCharAt(letterindex, alphabet.get(alphabetindex));
-					if(dict.contains(copyWord.toString())){
-						dict.remove(copyWord.toString());
-						String nextWord = new String(copyWord);
-						newladder = getWordLadderDFS(nextWord, end);
-						if(newladder != null){
+		StringBuilder copyWord = new StringBuilder(start); // copyWord now has
+															// start
+		for (letterindex = 0; letterindex < start.length(); letterindex++) {
+			char actualLetter = start.charAt(letterindex);
+			for (alphabetindex = 0; alphabetindex < 26; alphabetindex++) {
+				copyWord.setCharAt(letterindex, alphabet.get(alphabetindex));
+				if (dict.contains(copyWord.toString())) {
+					dict.remove(copyWord.toString());
+					String nextWord = new String(copyWord);
+					newladder = getWordLadderDFS(nextWord, end);
+					if (newladder != null) {
 						return ladder;
+					} else {
+						ladder.remove(nextWord);
 					}
-						else{
-							ladder.remove(nextWord);
-						}
-					}
-					
-					
 				}
-				copyWord.setCharAt(letterindex, actualLetter);
-			}
-			check = false;
-			
-			
-		}
-		
-		
-		//the code below is what we had before, and we also had newladder too
-		/*if (start.equals(end)) {
-			return null; // later
-		} else {
-			ladder.add(start);
-			visited.add(start);
-			newladder = recursionDFS(start, end, 0, 0);
-		}*/
-		// Returned list should be ordered start to end. Include start and end.
-		// Return empty list if no ladder.
-		// TODO some code
 
-		// TODO more code
-		return null; // replace this line later with real return
+			}
+			copyWord.setCharAt(letterindex, actualLetter);
+		}
+
+		return null;
 	}
 
 	public static ArrayList<String> getWordLadderBFS(String start, String end) {
@@ -312,11 +237,10 @@ public class Main {
 	public static void printLadder(ArrayList<String> ladder) {
 		if (ladder.equals(null)) {
 			System.out.println("no word ladder can be found between " + words.get(0) + " and " + words.get(1) + ". ");
-		} else if (ladder.size() == 1){
+		} else if (ladder.size() == 1) {
 			System.out.println("a " + (ladder.size() - 1) + "-rung word ladder exists between "
 					+ words.get(0).toString() + " and " + words.get(1).toString() + ". ");
-		}
-		else {
+		} else {
 			System.out.println("a " + (ladder.size() - 2) + "-rung word ladder exists between "
 					+ words.get(0).toString() + " and " + words.get(1).toString() + ". ");
 			for (int i = 0; i < ladder.size(); i++) {
