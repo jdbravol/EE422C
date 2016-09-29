@@ -28,6 +28,7 @@ public class Main {
 	static ArrayList<String> visited = new ArrayList<String>();
 	static ArrayList<Character> alphabet = new ArrayList<Character>();
 	static int count;
+	static boolean reverseflag;
 	static ArrayList<String> words = new ArrayList<String>();
 	// static variables and constants only here.
 
@@ -134,17 +135,20 @@ public class Main {
 		return ladder;
 	}
 
-	public static ArrayList<String> getWordLadderDFS(String start, String end) {
+	public static ArrayList<String> reverseDFS(String start, String end) {
 		ArrayList<String> newladder = new ArrayList<String>();
 		int letterindex;
 		int alphabetindex;
+		// boolean check = true;
 		ladder.add(start);
 		if (start.equals(end)) {
-			return LadderReducer();
+			return ladder;
+			// return LadderReducer();
 		}
 		if (dict.contains(start)) {
 			dict.remove(start);
 		}
+
 		StringBuilder copyWord = new StringBuilder(start); // copyWord now has
 															// start
 		for (letterindex = 0; letterindex < start.length(); letterindex++) {
@@ -154,7 +158,7 @@ public class Main {
 				if (dict.contains(copyWord.toString())) {
 					dict.remove(copyWord.toString());
 					String nextWord = new String(copyWord);
-					newladder = getWordLadderDFS(nextWord, end);
+					newladder = reverseDFS(nextWord, end);
 					if (newladder != null) {
 						return ladder;
 					} else {
@@ -165,7 +169,50 @@ public class Main {
 			}
 			copyWord.setCharAt(letterindex, actualLetter);
 		}
+		return null;
+	}
 
+	public static ArrayList<String> getWordLadderDFS(String start, String end) {
+		ArrayList<String> newladder = new ArrayList<String>();
+		int letterindex;
+		int alphabetindex;
+		// boolean check = true;
+		ladder.add(start);
+		if (start.equals(end)) {
+			return ladder;
+			// return LadderReducer();
+		}
+		if (dict.contains(start)) {
+			dict.remove(start);
+		}
+
+		StringBuilder copyWord = new StringBuilder(start); // copyWord now has
+															// start
+		for (letterindex = 0; letterindex < start.length(); letterindex++) {
+			char actualLetter = start.charAt(letterindex);
+			for (alphabetindex = 0; alphabetindex < 26; alphabetindex++) {
+				copyWord.setCharAt(letterindex, alphabet.get(alphabetindex));
+				if (dict.contains(copyWord.toString())) {
+					dict.remove(copyWord.toString());
+					String nextWord = new String(copyWord);
+					try {
+						newladder = getWordLadderDFS(nextWord, end);
+					} catch (StackOverflowError e) {
+						reverseflag = true;
+						ladder.clear();
+						initialize();
+						newladder = reverseDFS(end, words.get(0));
+					}
+					if (newladder != null) {
+						return ladder;
+					} else {
+						ladder.remove(nextWord);
+					}
+				}
+
+			}
+			copyWord.setCharAt(letterindex, actualLetter);
+		}
 		return null;
 	}
 
@@ -235,18 +282,36 @@ public class Main {
 	}
 
 	public static void printLadder(ArrayList<String> ladder) {
-		if (ladder.equals(null)) {
-			System.out.println("no word ladder can be found between " + words.get(0) + " and " + words.get(1) + ". ");
-		} else if (ladder.size() == 1) {
-			System.out.println("a " + (ladder.size() - 1) + "-rung word ladder exists between "
-					+ words.get(0).toString() + " and " + words.get(1).toString() + ". ");
+		if (reverseflag) {
+			if (ladder == null) {
+				System.out
+						.println("no word ladder can be found between " + words.get(0) + " and " + words.get(1) + ". ");
+			} else if (ladder.size() == 1) {
+				System.out.println("a " + (ladder.size() - 1) + "-rung word ladder exists between "
+						+ words.get(0).toString() + " and " + words.get(1).toString() + ". ");
+			} else {
+				System.out.println("a " + (ladder.size() - 2) + "-rung word ladder exists between "
+						+ words.get(0).toString() + " and " + words.get(1).toString() + ". ");
+				for (int i = ladder.size() - 1; i >= 0; i--) {
+					System.out.println(ladder.get(i).toString());
+				}
+			}
 		} else {
-			System.out.println("a " + (ladder.size() - 2) + "-rung word ladder exists between "
-					+ words.get(0).toString() + " and " + words.get(1).toString() + ". ");
-			for (int i = 0; i < ladder.size(); i++) {
-				System.out.println(ladder.get(i).toString());
+			if (ladder == null) {
+				System.out
+						.println("no word ladder can be found between " + words.get(0) + " and " + words.get(1) + ". ");
+			} else if (ladder.size() == 1) {
+				System.out.println("a " + (ladder.size() - 1) + "-rung word ladder exists between "
+						+ words.get(0).toString() + " and " + words.get(1).toString() + ". ");
+			} else {
+				System.out.println("a " + (ladder.size() - 2) + "-rung word ladder exists between "
+						+ words.get(0).toString() + " and " + words.get(1).toString() + ". ");
+				for (int i = 0; i < ladder.size(); i++) {
+					System.out.println(ladder.get(i).toString());
+				}
 			}
 		}
+		
 	}
 	// TODO
 	// Other private static methods here
