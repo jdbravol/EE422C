@@ -25,7 +25,6 @@ public class Main {
 
 	static Set<String> dict = new HashSet<String>();
 	static ArrayList<String> ladder = new ArrayList<String>();
-	static ArrayList<String> visited = new ArrayList<String>();
 	static ArrayList<Character> alphabet = new ArrayList<Character>();
 	static int count;
 	static boolean reverseflag;
@@ -179,7 +178,7 @@ public class Main {
 		// boolean check = true;
 		ladder.add(start);
 		if (start.equals(end)) {
-			return ladder;
+			return LadderReducer();
 			// return LadderReducer();
 		}
 		if (dict.contains(start)) {
@@ -200,8 +199,8 @@ public class Main {
 					} catch (StackOverflowError e) {
 						reverseflag = true;
 						ladder.clear();
-						initialize();
-						newladder = reverseDFS(end, words.get(0));
+						dict = makeDictionary();
+						newladder = reverseDFS(words.get(1), words.get(0));
 					}
 					if (newladder != null) {
 						return ladder;
