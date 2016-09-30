@@ -9,13 +9,13 @@ import org.junit.Test;
 public class TestCases {
 	
 	@Test
-	public void EmptyCase(){
+	public void aloofToOther(){
 		assertEquals(true, null == Main.getWordLadderDFS("aloof", "smart"));
 		assertEquals(true, null == Main.getWordLadderBFS("aloof", "smart"));
 	}
 
 	@Test
-	public void EmptyCase2(){
+	public void otherToAloof(){
 		assertEquals(true, null == Main.getWordLadderDFS("smart", "aloof"));
 		assertEquals(true, null == Main.getWordLadderBFS("smart", "aloof"));
 	}
