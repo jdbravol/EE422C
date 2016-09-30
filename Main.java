@@ -1,13 +1,13 @@
 /* WORD LADDER Main.java
  * EE422C Project 3 submission by
  * Juan David Bravo
- * <Student1 EID>
- * <Student1 5-digit Unique No.>
- * <Student2 Name>
- * <Student2 EID>
- * <Student2 5-digit Unique No.>
+ * jdb5338
+ * 16445
+ * Vidhu Appalaraju
+ * vsa267
+ * 16465
  * Slip days used: <1>
- * Git URL:
+ * Git URL: github.com/jdbravol/EE422C
  * Fall 2016
  */
 
