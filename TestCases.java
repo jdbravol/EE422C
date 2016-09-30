@@ -8,54 +8,41 @@ import org.junit.Test;
 
 public class TestCases {
 	
-	@Test
-	public void EmptyCase(){
-		ArrayList<String> nullArray = new ArrayList<String>();
-		assertEquals(true, nullArray == Main.getWordLadderDFS("aloof", "smart"));
-		assertEquals(true, nullArray == Main.getWordLadderBFS("aloof", "smart"));
-	}
 
 	@Test
 	public void aloofToOther(){
-		assertEquals(true, null == Main.getWordLadderDFS("aloof", "smart"));
-		assertEquals(true, null == Main.getWordLadderBFS("aloof", "smart"));
+		assert(null == Main.getWordLadderBFS("aloof", "smart"));
+		assert(1 == Main.getWordLadderDFS("aloof", "smart").size());
 	}
 
 	@Test
 	public void otherToAloof(){
-		assertEquals(true, null == Main.getWordLadderDFS("smart", "aloof"));
-		assertEquals(true, null == Main.getWordLadderBFS("smart", "aloof"));
+		assert(null == Main.getWordLadderBFS("smart", "aloof"));
+		assert(1 == Main.getWordLadderDFS("smart", "aloof").size());
 	}
 	
 	@Test
 	public void StackOverflow (){
-		assertEquals(true, 0 < Main.getWordLadderBFS("stone", "smart").size());	
-		assertEquals(true, 0 < Main.getWordLadderDFS("stone", "smart").size());
+		assert( 0 < Main.getWordLadderBFS("stone", "smart").size());	
+		assert( 0 < Main.getWordLadderDFS("stone", "smart").size());
 	}
 	
 	@Test
 	public void GeneralCase(){
 		//ArrayList<String> nullArray = new ArrayList<String>();
 		int count = 9;
-		assertEquals(true, 0 < Main.getWordLadderDFS("smart", "money").size()); //this tells us if the DFS reached the end word
-		assertEquals(true, count >= Main.getWordLadderBFS("smart", "money").size() - 2);//we know the ladder should be at most 9 because of the pdf
+		assert( 0 < Main.getWordLadderDFS("smart", "money").size()); //this tells us if the DFS reached the end word
+		assert( count >= Main.getWordLadderBFS("smart", "money").size() - 2);//we know the ladder should be at most 9 because of the pdf
 	}
 	
 	@Test
 	public void SameWordCase(){
 		ArrayList<String> sameArray = new ArrayList<String>();
 		sameArray.add("smart");
-		assertEquals(true, 1 == Main.getWordLadderDFS("smart", "smart").size()); //a 0 rung word ladder 
-		assertEquals(true, 1 == Main.getWordLadderBFS("smart", "smart").size());//
+		assert( 1 == Main.getWordLadderDFS("smart", "smart").size()); //a 0 rung word ladder 
+		assert( 1 == Main.getWordLadderBFS("smart", "smart").size());//
 	}
 	
-	@Test
-	public void GoingToAloofWords(){
-		ArrayList<String> nullArray = new ArrayList<String>();
-		assertEquals(true, nullArray == Main.getWordLadderDFS("smart", "aloof"));
-		assertEquals(true, nullArray == Main.getWordLadderBFS("smart", "aloof"));
-
-	}
 	
 	
 }
