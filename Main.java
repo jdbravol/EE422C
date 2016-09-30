@@ -26,7 +26,6 @@ public class Main {
 	static Set<String> dict = new HashSet<String>();
 	static Set<String> dict2 = new HashSet<String>();
 	static ArrayList<String> ladder = new ArrayList<String>();
-	static ArrayList<String> visited = new ArrayList<String>();
 	static ArrayList<Character> alphabet = new ArrayList<Character>();
 	static int count;
 	static boolean reverseflag;
@@ -48,12 +47,16 @@ public class Main {
 			ps = System.out; // default to Stdout
 		}
 		words = parse(kb);
+		ArrayList<String> newladder = new ArrayList<String>();
 		initialize();
-		// getWordLadderDFS(words.get(0), words.get(1));
-		// printLadder(ladder);
-		ladder = getWordLadderDFS(words.get(0), words.get(1));
-		// count = ladder.size() - 2;
-		printLadder(ladder);
+		newladder = getWordLadderBFS(words.get(0), words.get(1));
+		printLadder(newladder);
+		newladder = getWordLadderDFS(words.get(0), words.get(1));
+		printLadder(newladder);
+
+		//ladder.clear();
+		//ladder = getWordLadderBFS(words.get(0), words.get(1));
+		//printLadder(ladder);
 
 		kb.close();
 
@@ -180,7 +183,6 @@ public class Main {
 	}
 
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
-
 		ArrayList<String> newlads;
 
 		newlads = reverseDFS(start, end);
@@ -213,7 +215,8 @@ public class Main {
 
 			check.WordLadder.add(check.worditself);
 			if (check.worditself.equals(end)) {
-				return check.WordLadder;
+				ladder = check.WordLadder;
+				return ladder;
 			}
 			if (dict.contains(check.worditself)) {
 				dict.remove(check.worditself);// could be an if statement, need
@@ -264,11 +267,8 @@ public class Main {
 	}
 
 	public static void printLadder(ArrayList<String> ladder) {
-		if (ladder == null) {
+		if (ladder == null || ladder.size() == 1) {
 			System.out.println("no word ladder can be found between " + words.get(0) + " and " + words.get(1) + ". ");
-		} else if (ladder.size() == 1) {
-			System.out.println("a " + (ladder.size() - 1) + "-rung word ladder exists between "
-					+ words.get(0).toString() + " and " + words.get(1).toString() + ". ");
 		} else {
 			System.out.println("a " + (ladder.size() - 2) + "-rung word ladder exists between "
 					+ words.get(0).toString() + " and " + words.get(1).toString() + ". ");
